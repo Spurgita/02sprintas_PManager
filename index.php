@@ -51,28 +51,6 @@
 
             print("</tbody>");
             print("</table>");
-
-            // testas
-            $sql_empl = "SELECT e_id, e_name, e_surname, e_project_id FROM employees";
-            $res_empl = mysqli_query($conn, $sql_empl);
-            $sql_projects = "SELECT p_id, p_name FROM projects";
-
-
-            while ($row = mysqli_fetch_assoc($res_empl)) {
-                $prname = "None";
-                $match = false;
-                $res_pr = mysqli_query($conn, $sql_projects);
-                while ($prrow = mysqli_fetch_assoc($res_pr) and $match == false and $row["e_project_id"] > 0) {
-
-                    print('Lyginam: ' . $prrow["p_id"] . ' ir ' . $row["e_project_id"]);
-                    if ($prrow["p_id"] == $row["e_project_id"]) {
-                        $prname = $prrow["p_name"];
-                        print('--> atitinka ');
-                        $match = true;
-                    }
-                }
-            }
-            // testas pab 
             ?>
         </div>
     </main>

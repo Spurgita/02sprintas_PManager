@@ -1,44 +1,3 @@
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "mysql";
-$dbname = "pm_db";
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-// DELETE
-if (isset($_GET['action']) and $_GET['action'] == 'delete') {
-    $sql = 'DELETE FROM projects WHERE p_id = ?';
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $_GET['id']);
-    $res = $stmt->execute();
-    $stmt->close();
-
-    mysqli_close($conn);
-
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
-    die();
-} // END of DELETE
-
-// UPDATE
-// if (isset($_GET['action']) and $_GET['action'] == 'update') {
-//     echo "<script>alert('Paspaustas UPDATE');</script>";
-// $sql = 'DELETE FROM projects WHERE p_id = ?';
-// $stmt = $conn->prepare($sql);
-// $stmt->bind_param('i', $_GET['id']);
-// $res = $stmt->execute();
-
-// $stmt->close();
-// mysqli_close($conn);
-
-// header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
-// die();
-// } // END of UPDATE
-
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,6 +11,42 @@ if (isset($_GET['action']) and $_GET['action'] == 'delete') {
 </head>
 
 <body>
+
+    <?php
+    $servername = "localhost";
+    $username = "root";
+    $password = "mysql";
+    $dbname = "pm_db";
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    // DELETE
+    if (isset($_GET['action']) and $_GET['action'] == 'delete') {
+        // pakeisti id emploees
+        $id = $_GET['id'];
+        print("Naikinam indeksa " . $id);
+
+        $sql_empl = "SELECT e_project_id FROM employees";
+        $res_empl = mysqli_query($conn, $sql_empl);
+        while ($row = mysqli_fetch_assoc($res_empl)) {
+            if ($row["e_project_id"] == $id) {
+                mysqli_query($conn, "UPDATE employees SET e_project_id=0");
+            }
+        }
+
+        $sql = 'DELETE FROM projects WHERE p_id = ?';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $_GET['id']);
+        $res = $stmt->execute();
+        $stmt->close();
+
+        mysqli_close($conn);
+
+        header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+        die();
+    } // END of DELETE
+    ?>
     <header>
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

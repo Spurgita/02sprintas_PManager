@@ -18,7 +18,7 @@
     print('
     <div class="container">
     <div class="container-fluid bg-dark">
-        <span class="text-secondary">Add new employer</span>
+        <span class="text-secondary">Add new employee</span>
         <form method="post" class="d-flex align-items-center">
             <input name="id" class="form-control me-2" type="number" placeholder="Type id">
             <input name="name" class="form-control me-2" type="text" placeholder="Type name">
