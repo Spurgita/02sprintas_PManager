@@ -1,3 +1,37 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "mysql";
+$dbname = "pm_db";
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+// DELETE
+if (isset($_GET['action']) and $_GET['action'] == 'delete') {
+
+    $sql = 'DELETE FROM projects WHERE p_id = ?';
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $_GET['id']);
+    $res = $stmt->execute();
+    $stmt->close();
+
+    $sql_empl = "SELECT e_project_id FROM employees";
+    $res_empl = mysqli_query($conn, $sql_empl);
+
+    if (mysqli_num_rows($res_empl) > 0) {
+        while ($row = mysqli_fetch_assoc($res_empl)) {
+            mysqli_query($conn, "UPDATE employees SET e_project_id = '0' WHERE e_project_id = 'null'");
+        }
+    }
+
+    mysqli_close($conn);
+
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    die();
+} // END of DELETE
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,42 +45,6 @@
 </head>
 
 <body>
-
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "mysql";
-    $dbname = "pm_db";
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    // DELETE
-    if (isset($_GET['action']) and $_GET['action'] == 'delete') {
-        // pakeisti id emploees
-        $id = $_GET['id'];
-        print("Naikinam indeksa " . $id);
-
-        $sql_empl = "SELECT e_project_id FROM employees";
-        $res_empl = mysqli_query($conn, $sql_empl);
-        while ($row = mysqli_fetch_assoc($res_empl)) {
-            if ($row["e_project_id"] == $id) {
-                mysqli_query($conn, "UPDATE employees SET e_project_id=0");
-            }
-        }
-
-        $sql = 'DELETE FROM projects WHERE p_id = ?';
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('i', $_GET['id']);
-        $res = $stmt->execute();
-        $stmt->close();
-
-        mysqli_close($conn);
-
-        header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
-        die();
-    } // END of DELETE
-    ?>
     <header>
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -82,9 +80,9 @@
                 print('</thead>');
                 print('<tbody>');
 
-                $idx = 1;
+                $idx = 0;
                 while ($row = mysqli_fetch_assoc($res_pr)) {
-
+                    if ($row["p_id"] != 0) $idx++;
                     //projekto vykdytojai
                     $empl = "Nobody";
                     $res_empl = mysqli_query($conn, $sql_empl);
@@ -97,7 +95,7 @@
                     // end preparing
 
                     print('<tr>'
-                        . '<td>' . $idx++ . '</td>'
+                        . '<td>' . $idx . '</td>'
                         . '<td>' . $row["p_id"] . '</td>'
                         . '<td>' . $row["p_name"] . '</td>'
                         . '<td>' . $empl . '</td>'
@@ -112,20 +110,11 @@
             } else {
                 echo "<script>alert('0 results!');</script>";
             }
-
-            //
-
             print('</div></main>');
 
+            // FOOTER
+            require_once('add_update_project.php');
 
-            if (isset($_GET['action']) and $_GET['action'] == 'update') {
-
-                $id = $_GET['id'];
-                require_once('update_project.php');
-            } else {
-
-                require_once('add_project.php');
-            }
             ?>
 
 </body>

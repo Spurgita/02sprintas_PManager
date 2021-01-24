@@ -89,7 +89,9 @@ if (isset($_GET['action']) and $_GET['action'] == 'delete') {
                         . '<td>' . $row["e_surname"] . '</td>'
                         . '<td>' . $prname . '</td>'
                         . '<td>' . '<a href="?action=delete&id=' . $row["e_id"]
-                        . '"><button class="btn btn-outline-secondary btn-sm">DELETE</button></a>' . '</td>'
+                        . '"><button class="btn btn-outline-secondary btn-sm">DELETE</button></a>'
+                        . '<a href="?action=update&id=' . $row["e_id"]
+                        . '">&nbsp<button class="btn btn-outline-secondary btn-sm">UPDATE</button></a>' . '</td>'
                         . '</tr>');
                 }
                 print('</tbody>');
@@ -98,7 +100,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'delete') {
                 echo "<script>alert('0 results!');</script>";
             }
             print('</div></main>');
-            require_once('add_employee.php');
+            require_once('add_update_employee.php');
             ?>
 
 </body>

@@ -29,6 +29,8 @@ CREATE TABLE `employees` (
   `e_project_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`e_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `employees`
+ADD CONSTRAINT `e_project_id` FOREIGN KEY (`e_project_id`) REFERENCES `projects` (`p_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +39,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (7,'Hansas','Hansinas',0),(53,'Angelė','Angelienė',1),(64,'Zigmas','Zigmius',2),(69,'Hansas','Hansinas',0),(78,'Rasa','Rasytė',4),(101,'Jonas','Jonaitis',3),(102,'Petras','Petraitis',1),(222,'Irena','Irenkina',3);
+INSERT INTO `employees` VALUES (53,'Angelė','Angelienė',0),(64,'Zigmas','Zigmius',22),(69,'Hansas','Hansinas',44),(78,'Rasa','Rasytė',44),(101,'Jonas','Jonaitis',11),(102,'Petras','Petraitis',33),(222,'Irena','Irenkina',55);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +63,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'Pirmas projektas'),(2,'Antras projektas'),(3,'Trečias projektas'),(4,'Ketvirtas projektas'),(5,'Penktas projektas');
+INSERT INTO `projects` VALUES (0,'None'),(11,'Pirmas projektas'),(22,'Antras projektas'),(33,'Trečias projektas'),(44,'Ketvirtas projektas'),(55,'Penktas projektas');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

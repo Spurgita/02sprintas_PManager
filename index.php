@@ -40,8 +40,9 @@
             }
             $sql_empl = "SELECT e_id FROM employees";
             $res_empl = mysqli_query($conn, $sql_empl);
-            $sql_projects = "SELECT p_id FROM projects";
-            $res_pr = mysqli_query($conn, $sql_projects);
+            $sql_pr = "SELECT p_id FROM projects WHERE p_id NOT IN (0)";
+            $res_pr = mysqli_query($conn, $sql_pr);
+
             print('<table class="table table-bordered">');
             print('<thead class="thead-dark">');
             print("<tr><th>Employees</th><th>Projects</th></tr>");
